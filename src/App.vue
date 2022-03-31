@@ -10,16 +10,20 @@
     </div>
 
     <div class="text" v-if="this.difficultySelected && !this.gameStarted">
+      <span class="currentDifficulty"
+        >Current difficulty is:
+        {{ this.difficulty[this.currentDifficultyId].text }}</span
+      >
       <base-button
         class="setDifficulty"
-        text="Difficulty"
+        text="Set Difficulty"
         @click="onSetDifficulty()"
       >
       </base-button>
     </div>
 
     <div class="text" v-if="!this.difficultySelected && !this.gameStarted">
-      <h4>Select difficulty</h4>
+      <span class="currentDifficulty">Select difficulty</span>
       <base-button
         class="difficulty"
         text="Easy"
@@ -104,7 +108,7 @@ export default {
         for (let i = 0; i < this.state.length; i++) {
           Vue.set(this.state, i, false);
         }
-      }, 400);
+      }, this.currentDifficultyValue / 2);
     },
 
     onStart() {
@@ -200,6 +204,7 @@ export default {
     onChangeDifficulty(id) {
       this.currentDifficultyValue = this.difficulty[id].value;
       this.difficultySelected = true;
+      this.currentDifficultyId = id;
     },
 
     onSetDifficulty() {
@@ -211,16 +216,20 @@ export default {
     const difficulty = [
       {
         value: 1500,
+        text: "Easy",
       },
       {
         value: 1000,
+        text: "Medium",
       },
       {
         value: 400,
+        text: "Hard",
       },
     ];
 
     let currentDifficultyValue = difficulty[0].value;
+    let currentDifficultyId = 0;
 
     return {
       DIFFICULTY,
@@ -235,9 +244,10 @@ export default {
       score: 0,
       gameStarted: false,
       gameLoosed: false,
-      difficultySelected: false,
+      difficultySelected: true,
 
       difficulty,
+      currentDifficultyId,
 
       currentDifficultyValue,
 
@@ -315,8 +325,13 @@ body {
 
 .setDifficulty {
   --button-width: 150px;
-  --button-height: 45px;
+  --button-height: 65px;
   --button-font-size: 20px;
   margin-top: 30px;
+}
+
+.currentDifficulty {
+  margin-top: 10px;
+  font-size: 20px;
 }
 </style>
